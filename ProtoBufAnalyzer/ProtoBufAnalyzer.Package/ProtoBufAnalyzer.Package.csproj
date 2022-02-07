@@ -1,0 +1,68 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+    <SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <PackageId>ProtoBufAnalyzer</PackageId>
+    <PackageVersion>1.0.6</PackageVersion>
+    <Authors>Fabio Bonacina</Authors>
+    <!--<PackageLicenseUrl></PackageLicenseUrl>
+    <PackageProjectUrl></PackageProjectUrl>
+    <PackageIconUrl></PackageIconUrl>
+    <RepositoryUrl></RepositoryUrl>-->
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <Description>
+	    Detect common mistakes/gotchas with ProtoBuf:
+        - PBA001: Tag must be greater than 0
+        - PBA002: Duplicate Tag in a class
+        - PBA003: Collection property with no "hack" to manage Empty collections
+        - PBA004: Gap(s) in Tag's assignment
+        - PBA005: Usage of a reserved Tag
+    </Description>
+    <PackageReleaseNotes>
+        v.1.0.6
+        - Fixed PBA001: check for negative integer did not work
+        - Added Analyzer for PBA004: gaps in Tag's assignment
+        - Added Analyser for PBA005: usage of a reserved Tag
+        v.1.0.5
+        - Improved PBA003: checking initialisation of Properties only in default constructor
+        v.1.0.4
+        - Improved PBA003: checking for initialisation of a Property with backing field
+	    v.1.0.3
+	    - Fixed PBA003 analysis when there is more than one class in the same file
+	    - Fixed rules naming
+	    v.1.0.2
+	    - Added Analyzer for PBA001: Tag must be greater than 0
+	    - Added Analyzer for PBA002: duplicate Tag in a class
+	    - Added Analyzer for PBA003: collection property with no "hack" to manage Empty collections
+    </PackageReleaseNotes>
+    <Copyright>Free, or buy me a beer!</Copyright>
+    <PackageTags>ProtoBuf, Analyzers</PackageTags>
+    <DevelopmentDependency>true</DevelopmentDependency>
+    <NoPackageAnalysis>true</NoPackageAnalysis>
+
+    <TargetsForTfmSpecificContentInPackage>$(TargetsForTfmSpecificContentInPackage);_AddAnalyzersToOutput</TargetsForTfmSpecificContentInPackage>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ProtoBufAnalyzer.CodeFixes\ProtoBufAnalyzer.CodeFixes.csproj" />
+    <ProjectReference Include="..\ProtoBufAnalyzer\ProtoBufAnalyzer.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="tools\*.ps1" CopyToOutputDirectory="Always" Pack="true" PackagePath="" />
+  </ItemGroup>
+
+  <Target Name="_AddAnalyzersToOutput">
+    <ItemGroup>
+      <TfmSpecificPackageFile Include="$(OutputPath)\ProtoBufAnalyzer.dll" PackagePath="analyzers/dotnet/cs" />
+      <TfmSpecificPackageFile Include="$(OutputPath)\ProtoBufAnalyzer.CodeFixes.dll" PackagePath="analyzers/dotnet/cs" />
+    </ItemGroup>
+  </Target>
+
+</Project>
